@@ -1,0 +1,8 @@
+{
+    "pingTargets": [
+        "194.19.4.133",
+        "cloud01.wayscloud.no",
+        "cloud02.wayscloud.no",
+        "ways.no"
+    ]
+}
