@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os/exec"
-    "strings"
+        "strings"
 )
 
 var pingTargets = []string{
