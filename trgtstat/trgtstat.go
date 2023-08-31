@@ -8,6 +8,7 @@ import (
         "encoding/json"
 )
 
+// Input all targets (IPs & domains) into the targets.json file.
 type Config struct {
     PingTargets []string `json:"pingTargets"`
 }
