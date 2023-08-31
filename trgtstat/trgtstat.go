@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"os/exec"
-    "os"
-    "strings"
-    "encoding/json"
+        "os"
+        "strings"
+        "encoding/json"
 )
 
 type Config struct {
