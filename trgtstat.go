@@ -3,12 +3,17 @@ package main
 import (
 	"fmt"
 	"os/exec"
-        "strings"
+    "strings"
 )
 
-var pingTargets = []string{
-    "IP ADDRESS",
-    "DOMAIN NAME",
+var pingTargets = []string{  //Input targets in this array
+    "194.19.4.133",
+    "194.19.4.160",
+    "194.19.4.178",
+    "cloud01.wayscloud.no",
+    "cloud02.wayscloud.no",
+    "ways.no",
+    "wayscloud.no",
 } 
 
 func main() { 
@@ -16,12 +21,14 @@ func main() {
     for {
         fmt.Println("--- Target Status ---")
         fmt.Println("1. Ping targets")
-        fmt.Println("2. Traceroute on targets")
-        fmt.Println("3. Both")
-        fmt.Println("4. Exit")
-	fmt.Print("Choose and option: ")
+        fmt.Println("2. Traceroute")
+        fmt.Println("3. Nmap scan")
+        fmt.Println("4. All")
+        fmt.Println("5. Exit")
+		fmt.Print("Choose and option: ")
 
         fmt.Scanln(&choice)
+
         switch choice {
         case 1:      
             for _, ip := range pingTargets {
@@ -33,9 +40,17 @@ func main() {
             }
         case 2:
             for _, ip := range pingTargets {
-                traceRouteOnly(ip)
+                if traceRoute(ip) {
+                    fmt.Printf("\u2713 %s is reachable\n", ip)
+                } else {
+                    fmt.Printf("\u2717 %s is unreachable\n", ip)   
+                }
             }
         case 3:
+            for _, ip := range pingTargets {
+                nmapScan(ip)
+            }
+        case 4:
             for _, ip := range pingTargets {
                 if ipPing(ip) {
                     fmt.Printf("\u2713 %s is reachable\n", ip)
@@ -43,11 +58,11 @@ func main() {
                     fmt.Printf("\u2717 %s is unreachable\n", ip)   
                 }
             traceRoute(ip)
+            nmapScan(ip)
             }
-        case 4:
-            fmt.Println("Exitingg...")
+        case 5:
+            fmt.Println("Exiting...")
             return
-
         }
         break
     }
@@ -55,7 +70,8 @@ func main() {
 
 func ipPing(ip string) bool {
     fmt.Println(strings.Repeat("_", 80))
-    cmd := exec.Command("ping", "-c", "1", ip)
+    fmt.Println("Pinging target...")
+    cmd := exec.Command("ping", "-c", "4", ip)
     
     output, err := cmd.CombinedOutput()
     if err != nil {
@@ -68,9 +84,9 @@ func ipPing(ip string) bool {
     return true
 }
 
-func traceRouteOnly(ip string) bool {
+func traceRoute(ip string) bool {
     fmt.Println(strings.Repeat("_", 80))
-    fmt.Printf("Executing traceroute on selected targets...\n")
+    fmt.Printf("Executing traceroute on target...\n")
     cmd := exec.Command("traceroute", ip)
 
     output, err := cmd.CombinedOutput()
@@ -85,14 +101,14 @@ func traceRouteOnly(ip string) bool {
 }
 
 
-func traceRoute(ip string) bool {
+func nmapScan(ip string) bool {
     fmt.Println(strings.Repeat("_", 80))
-    fmt.Printf("Executing traceroute on target...\n")
-    cmd := exec.Command("traceroute", ip)
+    fmt.Printf("Running nmap on target...\n")
+    cmd := exec.Command("nmap", "-p 0-1000", "-Pn", ip)
 
     output, err := cmd.CombinedOutput()
     if err != nil {
-        fmt.Println("Failed to execute traceroute: ", err)
+        fmt.Println("Failed to execute nmap scan: ", err)
         return false
     }
     
