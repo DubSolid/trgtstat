@@ -20,7 +20,7 @@ func main() {
         fmt.Println("3. Nmap scan")
         fmt.Println("4. All")
         fmt.Println("5. Exit")
-		fmt.Print("Choose and option: ")
+	fmt.Print("Choose and option: ")
 
         fmt.Scanln(&choice)
 
