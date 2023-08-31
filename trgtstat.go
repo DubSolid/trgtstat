@@ -7,13 +7,8 @@ import (
 )
 
 var pingTargets = []string{  //Input targets in this array
-    "194.19.4.133",
-    "194.19.4.160",
-    "194.19.4.178",
-    "cloud01.wayscloud.no",
-    "cloud02.wayscloud.no",
-    "ways.no",
-    "wayscloud.no",
+    "IP ADDRESS",
+    "DOMAIN NAME",
 } 
 
 func main() { 
