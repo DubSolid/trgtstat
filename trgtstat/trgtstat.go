@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"os/exec"
-        "os"
-        "strings"
-        "encoding/json"
+    "os"
+    "strings"
+    "encoding/json"
 )
 
 // Input all targets (IPs & domains) into the targets.json file.
@@ -40,19 +40,30 @@ func main() {
         fmt.Println("3. Nmap scan")
         fmt.Println("4. All")
         fmt.Println("5. Exit")
-	fmt.Print("Choose and option: ")
+		fmt.Print("Choose and option: ")
 
         fmt.Scanln(&choice)
 
         switch choice {
-        case 1:      
+        case 1:
+            allReachable := true
+            var unreachableTargets []string
+
             for _, ip := range pingTargets {
                 if ipPing(ip) {
                     fmt.Printf("\u2713 %s is reachable\n", ip)
                 } else {
                     fmt.Printf("\u2717 %s is unreachable\n", ip)   
+                    allReachable = false
+                    unreachableTargets = append(unreachableTargets, ip)
                 }
             }
+
+                if allReachable {
+                    fmt.Println("\n\u2713 All targets are reachable.")
+                } else {
+                    fmt.Println("\n\u2717 Not all targets are reachable. Unreachable targets:", strings.Join(unreachableTargets, ", "))
+                }
         case 2:
             for _, ip := range pingTargets {
                 if traceRoute(ip) {
@@ -86,7 +97,7 @@ func main() {
 func ipPing(ip string) bool {
     fmt.Println(strings.Repeat("_", 80))
     fmt.Println("Pinging target...")
-    cmd := exec.Command("ping", "-c", "4", ip)
+    cmd := exec.Command("ping", "-c", "2", ip)
     
     output, err := cmd.CombinedOutput()
     if err != nil {
